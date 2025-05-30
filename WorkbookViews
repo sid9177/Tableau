@@ -1,0 +1,17 @@
+SELECT 
+    w.name AS workbook_name,
+    v.name AS view_name,
+    u.name AS user_name,  -- Using 'name' from the system_users table
+    SUM(vs.nviews) AS total_views
+FROM 
+    workbooks w
+JOIN 
+    views v ON w.id = v.workbook_id
+JOIN 
+    views_stats vs ON v.id = vs.view_id
+JOIN 
+    system_users u ON vs.user_id = u.id
+GROUP BY 
+    w.name, v.name, u.name
+ORDER BY 
+    w.name, total_views DESC;
